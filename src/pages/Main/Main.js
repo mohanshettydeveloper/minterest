@@ -1,56 +1,30 @@
-import Header from "../../components/Header/Header";
-import mokemon from "../../components/Mokemon/Mokemon";
 import {useEffect, useState} from "react";
 import MokeMonsImageList from "../../components/ImageList/MokeMonsImageList";
-import {loadMokeMonsDetailArr} from "../../Functions/GetMokeMonDetails";
-
+import {getMokeMonsByPage} from "../../Functions/GetMokeMonsByPage";
 
 const Main = () => {
+    const [allMokeMons, setAllMokeMons] = useState([]);
+    const [state, setState] = useState(Date.now());
+    useEffect(() => {
 
-        const allMokeMonsUrl = 'https://pokeapi.co/api/v2/pokemon?limit=151';
 
-        const [mokeMonsResponse, setMokeMonsResponse] = useState([]);
-
-        let itemData = [];
-
-        useEffect(() => {
-
-            fetch(allMokeMonsUrl)
-                .then(response =>
-                    response.json()
-                )
-                .then(results => {
-                    setMokeMonsResponse(results.results);
-                });
-
-        }, []);
-
-    const fetchMokeMonsDetails = () => {
-        const eachMokeMonsUrl = `https://pokeapi.co/api/v2/pokemon/` + counter;
-        fetch(eachMokeMonsUrl)
-            .then(response =>
-                response.json()
-            )
-            .then(async allDetails => {
-                itemData.push(await loadMokeMonsDetailArr(allDetails, counter));
+        loadMokeMons();
+    }, []);
+    const loadMokeMons = () => {
+        setState(Date.now())
+        const allMokeMonsUrl = 'https://pokeapi.co/api/v2/pokemon?limit=9';
+        fetch(allMokeMonsUrl)
+            .then(response => response.json())
+            .then(results => {
+                setAllMokeMons([]);
+                setAllMokeMons(results.results);
             });
-
     };
 
-    let counter = 0;
-        mokeMonsResponse.forEach((mokeMon) => {
-                counter++;
-                fetchMokeMonsDetails(counter);
-            }
-        )
-        ;
-
-        return (
-            <div align='center'>
-                <MokeMonsImageList itemData={itemData}/>
-            </div>
-        );
-    }
-;
+    return (<div align='center'>
+        <button type='submit' onClick={loadMokeMons}>Load Mokemons</button>
+        <MokeMonsImageList allMokeMons={allMokeMons} someKey={state}/>
+    </div>);
+};
 
 export default Main;
