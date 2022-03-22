@@ -8,6 +8,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import {useEffect, useState} from "react";
 import {loadMokeMonsDetailArr} from "../../Functions/GetMokeMonDetails";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import {Grid} from "@mui/material";
 
 const MokeMonsImageList = ({allMokeMons, someKey}) => {
@@ -32,13 +33,26 @@ const MokeMonsImageList = ({allMokeMons, someKey}) => {
                 setItemData(itemData => [...itemData, loadMokeMonsDetailArr(allDetails, counter)]);
             });
     };
-    const handleLike = () => {
-        console.log('I am liked');
+    const handleInfo = (e) => {
+        console.log('My info is=', e.currentTarget.value);
     }
 
-    const handleDisLike = () => {
-        console.log('I am Disliked');
+    const handleLike = (e) => {
+        console.log('I am liked=', e.currentTarget.value);
     }
+
+    const handleDislike = (e) => {
+        // console.log('I am Disliked=', e.currentTarget.value);
+        const mokeMonName = e.currentTarget.value;
+        for (let i = 0; i < itemData.length; i++) {
+            const tempItem = itemData[i];
+            if (tempItem[0].name == mokeMonName) {
+                itemData.splice(i, 1);
+                setItemData([...itemData]);
+            }
+        }
+
+    };
 
 
     return (<ImageList sx={{width: 400, height: 500,}}>
@@ -56,11 +70,19 @@ const MokeMonsImageList = ({allMokeMons, someKey}) => {
                 <h4>{item[0].name.toUpperCase()}</h4>
                 <div>
                     <IconButton
-                        onClick={handleDisLike}
+                        value={item[0].name}
+                        onClick={handleInfo}
                     >
                         <InfoIcon/>
                     </IconButton>
                     <IconButton
+                        value={item[0].name}
+                        onClick={handleDislike}
+                    >
+                        <ThumbDownIcon/>
+                    </IconButton>
+                    <IconButton
+                        value={item[0].name}
                         onClick={handleLike}
                     >
                         <ThumbUpIcon/>
