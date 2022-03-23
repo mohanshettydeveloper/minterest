@@ -1,38 +1,28 @@
 import * as React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
 import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import {useEffect, useState} from "react";
-import {loadMokeMonsDetailArr} from "../../Functions/GetMokeMonDetails";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import {Grid} from "@mui/material";
 
-const MokeMonsImageList = ({allMokeMons, someKey}) => {
-    const [itemData, setItemData] = useState([])
 
-    let counter = 0;
+const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
+    console.log('allMokeMonDetail',allMokeMonsDetail);
+    const [itemData, setItemData] = useState([]);
 
+    let reload = false;
+    // let itemData = [];
+    let nineMokeMons = [];
+    const [mokeMonsCounter, setMokeMonsCounter] = useState(9);
+    // console.log(allMokeMonsDetail)
     useEffect(() => {
-        setItemData([]);
-        allMokeMons.forEach(() => {
-            counter++;
-            fetchMokeMonsDetails(counter);
-        });
+        loadFirst9MokeMons();
+    }, [someKey,reload]);
 
-    }, [someKey]);
-    const fetchMokeMonsDetails = (counter) => {
-        const eachMokeMonsUrl = `https://pokeapi.co/api/v2/pokemon/` + counter;
-        fetch(eachMokeMonsUrl)
-            .then(response => response.json())
-            .then(allDetails => {
-
-                setItemData(itemData => [...itemData, loadMokeMonsDetailArr(allDetails, counter)]);
-            });
-    };
+    // console.log(itemData);
     const handleInfo = (e) => {
         console.log('My info is=', e.currentTarget.value);
     }
@@ -51,49 +41,99 @@ const MokeMonsImageList = ({allMokeMons, someKey}) => {
                 setItemData([...itemData]);
             }
         }
-
     };
 
+    const loadNewMokeMons = (e) => {
+        let tempMokeMonsCounter = 0;
+        console.log('mokeMonsCounter=', mokeMonsCounter);
+        if (mokeMonsCounter >= allMokeMonsDetail.length) {
+            setMokeMonsCounter(0);
+        }
 
-    return (<ImageList sx={{width: 400, height: 500,}}>
-        <ImageListItem key="Subheader" cols={3}>
-            <ListSubheader component="div"><h2>Mokemons</h2></ListSubheader>
-        </ImageListItem>
-        {itemData.map((item) => (<ImageListItem key={item[0].key}>
-                <img
-                    src={`${item[0].front}?w=100&&auto=format`}
-                    srcSet={`${item[0].front}?w=100&auto=format`}
-                    alt={item[0].name}
-                    loading="lazy"
-                />
+        if (e.currentTarget.value === 'n') {
+            tempMokeMonsCounter = mokeMonsCounter + 9;
+            if (tempMokeMonsCounter >= allMokeMonsDetail.length) {
+                tempMokeMonsCounter = 9;
+                setMokeMonsCounter(0);
+            }
 
-                <h4>{item[0].name.toUpperCase()}</h4>
-                <div>
-                    <IconButton
-                        value={item[0].name}
-                        onClick={handleInfo}
-                    >
-                        <InfoIcon/>
-                    </IconButton>
-                    <IconButton
-                        value={item[0].name}
-                        onClick={handleDislike}
-                    >
-                        <ThumbDownIcon/>
-                    </IconButton>
-                    <IconButton
-                        value={item[0].name}
-                        onClick={handleLike}
-                    >
-                        <ThumbUpIcon/>
-                    </IconButton>
-                </div>
+            nineMokeMons = allMokeMonsDetail.slice(mokeMonsCounter, tempMokeMonsCounter);
+        } else {
+            tempMokeMonsCounter = mokeMonsCounter - 9;
+            if (tempMokeMonsCounter < 0) {
+                tempMokeMonsCounter = 9;
+                setMokeMonsCounter(0);
+            }
+            nineMokeMons = allMokeMonsDetail.slice(tempMokeMonsCounter, mokeMonsCounter);
+        }
 
+        console.log('tempMokeMonsCounter=', tempMokeMonsCounter)
 
-            </ImageListItem>
+        console.log('nineMokeMons=', nineMokeMons);
+        console.log(allMokeMonsDetail.length);
+        setItemData([]);
+        setItemData(nineMokeMons);
+        setMokeMonsCounter(tempMokeMonsCounter);
+        reload = !reload;
+    };
 
-        ))}
-    </ImageList>);
+    const loadFirst9MokeMons = () => {
+        nineMokeMons = allMokeMonsDetail.slice(0, 9);
+        setItemData(nineMokeMons);
+        reload = !reload;
+    };
+
+    // console.log(itemData)
+    return (<div>
+{/*
+            <div>
+                <button type='submit' onClick={loadFirst9MokeMons}>Load Mokemons</button>
+            </div>
+*/}
+            <ImageList sx={{width: 400, height: 500,}}>
+                <ImageListItem key="Subheader" cols={3}>
+                    <ListSubheader component="div"><h2>Mokemons</h2></ListSubheader>
+                </ImageListItem>
+                {itemData.map((item) => (<ImageListItem key={item[0].key}>
+                        <img
+                            src={`${item[0].front}?w=100&&auto=format`}
+                            srcSet={`${item[0].front}?w=100&auto=format`}
+                            alt={item[0].name}
+                            loading="lazy"
+                        />
+
+                        <h4>{item[0].name.toUpperCase()}</h4>
+                        <div>
+                            <IconButton
+                                value={item[0].name}
+                                onClick={handleInfo}
+                            >
+                                <InfoIcon/>
+                            </IconButton>
+                            <IconButton
+                                value={item[0].name}
+                                onClick={handleDislike}
+                            >
+                                <ThumbDownIcon/>
+                            </IconButton>
+                            <IconButton
+                                value={item[0].name}
+                                onClick={handleLike}
+                            >
+                                <ThumbUpIcon/>
+                            </IconButton>
+                        </div>
+
+                    </ImageListItem>
+
+                ))}
+            </ImageList>
+            <div>
+                <button type='button' value='p' onClick={loadNewMokeMons}>Load Previous</button>
+                <button type='button' value='n' onClick={loadNewMokeMons}>Load Next</button>
+            </div>
+        </div>
+    );
 };
 
 export default MokeMonsImageList;
