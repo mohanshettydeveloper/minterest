@@ -12,16 +12,16 @@ import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {setLikedMokeMons} from '../../selectedMokeMonsSlice';
 import {Button} from "@mui/material";
+import Modal from "@mui/material/Modal";
+import BasicModal from "../Modal/BasicModal";
 
 const useStyles = makeStyles({
     button: {
-        background: 'yellow',
-        textAlign: 'center',
-        fontFamily: 'verdana',
-        fontWeight: 'bolder',
+        background: 'yellow', textAlign: 'center', fontFamily: 'verdana', fontWeight: 'bolder',
     },
 });
 const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
+
     const dispatch = useDispatch();
 
     const classes = useStyles();
@@ -34,14 +34,14 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
     const [mokeMonsCounter, setMokeMonsCounter] = useState(0);
 
     const [selectedMokeMons, setselectedMokeMons] = useState([]);
-    // let selectedMokeMons = [];
 
     useEffect(() => {
         loadFirst9MokeMons();
     }, [someKey, reload, allMokeMonsDetail]);
 
     const handleInfo = (e) => {
-        console.log('My info is=', e.currentTarget.value);
+        alert('I am clicked' + e.currentTarget.value);
+
     }
 
     const handleLike = (e) => {
@@ -100,7 +100,7 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
         setMokeMonsCounter(tempMokeMonsCounter);
         reload = !reload;
 
-        console.log('nineMokeMons=', nineMokeMons);
+        // console.log('nineMokeMons=', nineMokeMons);
     };
 
     const loadFirst9MokeMons = () => {
@@ -109,64 +109,64 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
         reload = !reload;
     };
 
+
     return (<div>
-            <ImageList sx={{width: 400, height: 500,}}>
-                <ImageListItem key="Subheader" cols={3}>
-                    <ListSubheader component="div"><h2>Mokemons</h2></ListSubheader>
-                </ImageListItem>
-                {itemData.map((item) => (<ImageListItem key={item[0].key}>
-                        <img
-                            src={`${item[0].front}?w=100&&auto=format`}
-                            srcSet={`${item[0].front}?w=100&auto=format`}
-                            alt={item[0].name}
-                            loading="lazy"
+        <ImageList sx={{width: 400, height: 500,}}>
+            <ImageListItem key="Subheader" cols={3}>
+                <ListSubheader component="div"><h2>Mokemons</h2></ListSubheader>
+            </ImageListItem>
+            {itemData.map((item) => (<ImageListItem key={item[0].key}>
+                    <img
+                        src={`${item[0].front}?w=100&&auto=format`}
+                        srcSet={`${item[0].front}?w=100&auto=format`}
+                        alt={item[0].name}
+                        loading="lazy"
+                    />
+
+                    <h4>{item[0].name.toUpperCase()}</h4>
+                    <div>
+
+                        <BasicModal
+                            name={item[0].name}
                         />
 
-                        <h4>{item[0].name.toUpperCase()}</h4>
-                        <div>
-                            <IconButton
-                                value={item[0].name}
-                                onClick={handleInfo}
-                            >
-                                <InfoIcon/>
-                            </IconButton>
-                            <IconButton
-                                value={item[0].name}
-                                onClick={handleDislike}
-                            >
-                                <ThumbDownIcon/>
-                            </IconButton>
-                            <IconButton
-                                value={item[0].name}
-                                onClick={handleLike}
-                            >
-                                <ThumbUpIcon/>
-                            </IconButton>
-                        </div>
 
-                    </ImageListItem>
+                        <IconButton
+                            value={item[0].name}
+                            onClick={handleDislike}
+                        >
+                            <ThumbDownIcon/>
+                        </IconButton>
+                        <IconButton
+                            value={item[0].name}
+                            onClick={handleLike}
+                        >
+                            <ThumbUpIcon/>
+                        </IconButton>
+                    </div>
 
-                ))}
-            </ImageList>
-            <div style={{width:400, display:'flex', textAlign:'center'}}>
+                </ImageListItem>
 
-                <Button variant="contained" type='button' className={classes.button} value='p' onClick={loadNewMokeMons}
-                        disabled={allMokeMonsDetail.length <= 0}>
-                    Load Previous
-                </Button>
+            ))}
+        </ImageList>
+        <div style={{width: 400, display: 'flex', textAlign: 'center'}}>
 
-                <Button variant="contained" type='button' className={classes.button} value='n' onClick={loadNewMokeMons}
-                        disabled={allMokeMonsDetail.length <= 0}>
-                    Load Next
-                </Button>
-                <Button variant="contained" type='button' className={classes.button}
-                        disabled={selectedMokeMons.length <= 0}>
-                    <Link to="/gallery">Gallery</Link>
-                </Button>
+            <Button variant="contained" type='button' className={classes.button} value='p' onClick={loadNewMokeMons}
+                    disabled={allMokeMonsDetail.length <= 0}>
+                Load Previous
+            </Button>
 
-            </div>
+            <Button variant="contained" type='button' className={classes.button} value='n' onClick={loadNewMokeMons}
+                    disabled={allMokeMonsDetail.length <= 0}>
+                Load Next
+            </Button>
+            <Button variant="contained" type='button' className={classes.button}
+                    disabled={selectedMokeMons.length <= 0}>
+                <Link to="/gallery">Gallery</Link>
+            </Button>
+
         </div>
-    );
+    </div>);
 };
 
 export default MokeMonsImageList;

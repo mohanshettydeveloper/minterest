@@ -4,8 +4,8 @@ const useStyles = makeStyles({
     title: {
         fontWeight: 'bold',
         fontFamily:'verdana',
-        fontSize:'50px',
-        color:'red'
+        fontSize:'30px',
+        color:'green'
 
     },
 });
