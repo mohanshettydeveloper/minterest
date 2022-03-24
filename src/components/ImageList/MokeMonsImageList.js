@@ -9,6 +9,8 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import makeStyles from "@mui/styles/makeStyles";
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
+import {appendData} from "../../action";
 
 const useStyles = makeStyles({
     button: {
@@ -17,6 +19,14 @@ const useStyles = makeStyles({
         fontFamily: 'verdana',
         fontWeight: 'bolder',
     },
+});
+const mapDispatchToProps = {
+    appendData
+}
+
+const mapStateToProps = state => ({
+    name: state.name,
+    books: state.books
 });
 const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
 
@@ -104,10 +114,6 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
         reload = !reload;
     };
 
-    const mapStateToProps = state => ({
-        name: state.name,
-        selectedMokeMons: state.selectedMokeMons,
-    });
     return (<div>
             <ImageList sx={{width: 400, height: 500,}}>
                 <ImageListItem key="Subheader" cols={3}>
@@ -167,5 +173,4 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
     );
 };
 
-
-export default MokeMonsImageList;
+export default connect(mapStateToProps, mapDispatchToProps) (MokeMonsImageList);
