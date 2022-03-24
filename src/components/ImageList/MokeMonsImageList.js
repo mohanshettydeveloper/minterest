@@ -9,8 +9,8 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import makeStyles from "@mui/styles/makeStyles";
 import {Link} from "react-router-dom";
-import {connect} from "react-redux";
-import {appendData} from "../../action";
+import {useDispatch} from "react-redux";
+import {setLikedMokeMons} from '../../selectedMokeMonsSlice';
 
 const useStyles = makeStyles({
     button: {
@@ -20,15 +20,8 @@ const useStyles = makeStyles({
         fontWeight: 'bolder',
     },
 });
-const mapDispatchToProps = {
-    appendData
-}
-
-const mapStateToProps = state => ({
-    name: state.name,
-    books: state.books
-});
 const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
+    const dispatch = useDispatch();
 
     const classes = useStyles();
 
@@ -59,8 +52,9 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
                 setselectedMokeMons([...selectedMokeMons]);
             }
         }
-        console.log(selectedMokeMons);
-    }
+        dispatch(setLikedMokeMons(selectedMokeMons));
+    };
+
 
     const handleDislike = (e) => {
         const mokeMonName = e.currentTarget.value;
@@ -165,7 +159,7 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
                 </button>
                 <button type='button' className={classes.button}
                         disabled={selectedMokeMons.length <= 0}>
-                    <Link to="/gallery" selectedMokeMons={selectedMokeMons}>Gallery</Link>
+                    <Link to="/gallery">Gallery</Link>
                 </button>
 
             </div>
@@ -173,4 +167,4 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps) (MokeMonsImageList);
+export default MokeMonsImageList;

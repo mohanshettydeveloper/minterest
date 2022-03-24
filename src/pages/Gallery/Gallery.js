@@ -1,12 +1,16 @@
 import Header from "../../components/Header/Header";
+import {Counter} from "../../Counter";
+import SelectedMokeMonsGallery from "../../SelectedMokeMonsGallery";
 
-const Gallery = ({selectedMokeMons}) => {
-    console.log('selectedMokeMons=', selectedMokeMons);
+
+const Gallery = () => {
+
     return (
         <div align='center'>
             <Header/>
-            <h2>Selected MokeMons</h2>
-        </div>);
+            <SelectedMokeMonsGallery/>
+        </div>
+    )
 };
 
 export default Gallery;
