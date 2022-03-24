@@ -18,7 +18,7 @@ const style = {
     p: 4,
 };
 
-export default function BasicModal({name}) {
+export default function BasicModal({name, weight, height, imageSrc, base_experience}) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -33,11 +33,15 @@ export default function BasicModal({name}) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        {name}
+                    <img src={imageSrc}/>
+                    <Typography id="modal-modal-title" variant="h3" component="h2">
+                        {name.toUpperCase()}
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{mt: 2}}>
-                        My Name is {name}
+                    <Typography id="modal-modal-description" variant="h6" sx={{mt: 2}}>
+                        My Name is {name.toUpperCase()} and
+                        I weigh about {weight} pounds!!. My height is {height} feet and my base experience is {base_experience}.
+                        <Typography sx={{color:'red', fontWeight:'bolder'}}>TRUST ME AND I WILL WIN FOR YOU!, go LIKE ME!!! :)</Typography>
+
                     </Typography>
                 </Box>
             </Modal>

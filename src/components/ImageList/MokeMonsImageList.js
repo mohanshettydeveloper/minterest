@@ -128,6 +128,10 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
 
                         <BasicModal
                             name={item[0].name}
+                            weight={item[0].weight}
+                            height={item[0].height}
+                            base_experience={item[0].base_experience}
+                            imageSrc={item[0].front}
                         />
 
 

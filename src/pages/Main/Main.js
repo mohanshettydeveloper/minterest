@@ -67,7 +67,8 @@ const Main = () => {
     return (<div align='center'>
         <div><Header/></div>
         <div>
-            <Button variant="contained" type='submit' className={classes.button} onClick={loadAllMokeMonsSummary}>Load Mokemons</Button>
+            <Button variant="contained" type='submit' className={classes.button} onClick={loadAllMokeMonsSummary}>Load
+                Mokemons</Button>
             <MokeMonsImageList allMokeMonsDetail={allMokeMonsDetail} someKey={state}/>
             {/*<button type='button' onClick={loadNewMokeMons('p')}>Load Previous</button>*/}
         </div>

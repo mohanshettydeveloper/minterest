@@ -5,6 +5,10 @@ export const loadMokeMonsDetailArr = (allDetails, counter) => {
         key: counter,
         name: allDetails.name,
         front: allDetails.sprites.front_default,
+        weight: allDetails.weight,
+        height: allDetails.height,
+        base_experience: allDetails.base_experience,
+
     });
     return itemData;
 };
