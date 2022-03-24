@@ -1,9 +1,20 @@
 import {useEffect, useState} from "react";
 import MokeMonsImageList from "../../components/ImageList/MokeMonsImageList";
-import {getMokeMonsByPage} from "../../Functions/GetMokeMonsByPage";
 import {loadMokeMonsDetailArr} from "../../Functions/GetMokeMonDetails";
+import makeStyles from "@mui/styles/makeStyles";
+import Header from "../../components/Header/Header";
 
+const useStyles = makeStyles({
+    button: {
+        background: 'yellow',
+        textAlign: 'center',
+        fontFamily: 'verdana',
+        fontWeight: 'bolder',
+    },
+
+});
 const Main = () => {
+    const classes = useStyles();
     const [allMokeMonsSummary, setAllMokeMonsSummary] = useState([]);
     const [allMokeMonsDetail, setAllMokeMonsDetail] = useState([]);
     // let allMokeMonsDetail = [];
@@ -12,13 +23,15 @@ const Main = () => {
     const [state, setState] = useState(Date.now());
 
     useEffect(() => {
+        setAllMokeMonsSummary([]);
+        setAllMokeMonsDetail([]);
         loadAllMokeMonsSummary();
-        // loadAllMokeMonsDetail();
     }, []);
+
 
     const loadAllMokeMonsSummary = () => {
         setState(Date.now())
-        const allMokeMonsUrl = 'https://pokeapi.co/api/v2/pokemon?limit=20';
+        const allMokeMonsUrl = 'https://pokeapi.co/api/v2/pokemon?limit=45';
         fetch(allMokeMonsUrl)
             .then(response => response.json())
             .then(results => {
@@ -27,6 +40,7 @@ const Main = () => {
                 // allMokeMonsSummary = [...allMokeMonsSummary, results.results];
                 // console.log(allMokeMonsSummary);
             });
+        setAllMokeMonsDetail([])
         loadAllMokeMonsDetail();
     };
 
@@ -48,13 +62,13 @@ const Main = () => {
             });
     };
 
-    // console.log(allMokeMonsDetail);
-
     return (<div align='center'>
-        <button type='submit' onClick={loadAllMokeMonsSummary}>Load Mokemons</button>
-        <MokeMonsImageList allMokeMonsDetail={allMokeMonsDetail} someKey={state}/>
-        {/*<button type='button' onClick={loadNewMokeMons('p')}>Load Previous</button>*/}
-
+        <div><Header/></div>
+        <div>
+            <button type='submit' className={classes.button} onClick={loadAllMokeMonsSummary}>Load Mokemons</button>
+            <MokeMonsImageList allMokeMonsDetail={allMokeMonsDetail} someKey={state}/>
+            {/*<button type='button' onClick={loadNewMokeMons('p')}>Load Previous</button>*/}
+        </div>
     </div>);
 };
 

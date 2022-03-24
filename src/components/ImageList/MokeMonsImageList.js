@@ -7,36 +7,56 @@ import InfoIcon from '@mui/icons-material/Info';
 import {useEffect, useState} from "react";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import makeStyles from "@mui/styles/makeStyles";
+import {Link} from "react-router-dom";
 
-
+const useStyles = makeStyles({
+    button: {
+        background: 'yellow',
+        textAlign: 'center',
+        fontFamily: 'verdana',
+        fontWeight: 'bolder',
+    },
+});
 const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
-    console.log('allMokeMonDetail',allMokeMonsDetail);
+
+    const classes = useStyles();
+
     const [itemData, setItemData] = useState([]);
 
     let reload = false;
-    // let itemData = [];
+
     let nineMokeMons = [];
-    const [mokeMonsCounter, setMokeMonsCounter] = useState(9);
-    // console.log(allMokeMonsDetail)
+    const [mokeMonsCounter, setMokeMonsCounter] = useState(0);
+
+    const [selectedMokeMons, setselectedMokeMons] = useState([]);
+    // let selectedMokeMons = [];
+
     useEffect(() => {
         loadFirst9MokeMons();
-    }, [someKey,reload]);
+    }, [someKey, reload, allMokeMonsDetail]);
 
-    // console.log(itemData);
     const handleInfo = (e) => {
         console.log('My info is=', e.currentTarget.value);
     }
 
     const handleLike = (e) => {
-        console.log('I am liked=', e.currentTarget.value);
-    }
-
-    const handleDislike = (e) => {
-        // console.log('I am Disliked=', e.currentTarget.value);
         const mokeMonName = e.currentTarget.value;
         for (let i = 0; i < itemData.length; i++) {
             const tempItem = itemData[i];
-            if (tempItem[0].name == mokeMonName) {
+            if (tempItem[0].name === mokeMonName) {
+                selectedMokeMons.push(tempItem);
+                setselectedMokeMons([...selectedMokeMons]);
+            }
+        }
+        console.log(selectedMokeMons);
+    }
+
+    const handleDislike = (e) => {
+        const mokeMonName = e.currentTarget.value;
+        for (let i = 0; i < itemData.length; i++) {
+            const tempItem = itemData[i];
+            if (tempItem[0].name === mokeMonName) {
                 itemData.splice(i, 1);
                 setItemData([...itemData]);
             }
@@ -44,7 +64,7 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
     };
 
     const loadNewMokeMons = (e) => {
-        let tempMokeMonsCounter = 0;
+        let tempMokeMonsCounter;
         console.log('mokeMonsCounter=', mokeMonsCounter);
         if (mokeMonsCounter >= allMokeMonsDetail.length) {
             setMokeMonsCounter(0);
@@ -56,7 +76,8 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
                 tempMokeMonsCounter = 9;
                 setMokeMonsCounter(0);
             }
-
+            console.log('When n mokeMonsCounter=', mokeMonsCounter)
+            console.log('When n tempMokeMonsCounter=', tempMokeMonsCounter)
             nineMokeMons = allMokeMonsDetail.slice(mokeMonsCounter, tempMokeMonsCounter);
         } else {
             tempMokeMonsCounter = mokeMonsCounter - 9;
@@ -64,17 +85,17 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
                 tempMokeMonsCounter = 9;
                 setMokeMonsCounter(0);
             }
+            console.log('When p tempMokeMonsCounter=', tempMokeMonsCounter)
+            console.log('When p mokeMonsCounter=', mokeMonsCounter)
             nineMokeMons = allMokeMonsDetail.slice(tempMokeMonsCounter, mokeMonsCounter);
         }
 
-        console.log('tempMokeMonsCounter=', tempMokeMonsCounter)
-
-        console.log('nineMokeMons=', nineMokeMons);
-        console.log(allMokeMonsDetail.length);
         setItemData([]);
         setItemData(nineMokeMons);
         setMokeMonsCounter(tempMokeMonsCounter);
         reload = !reload;
+
+        console.log('nineMokeMons=', nineMokeMons);
     };
 
     const loadFirst9MokeMons = () => {
@@ -83,13 +104,11 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
         reload = !reload;
     };
 
-    // console.log(itemData)
+    const mapStateToProps = state => ({
+        name: state.name,
+        selectedMokeMons: state.selectedMokeMons,
+    });
     return (<div>
-{/*
-            <div>
-                <button type='submit' onClick={loadFirst9MokeMons}>Load Mokemons</button>
-            </div>
-*/}
             <ImageList sx={{width: 400, height: 500,}}>
                 <ImageListItem key="Subheader" cols={3}>
                     <ListSubheader component="div"><h2>Mokemons</h2></ListSubheader>
@@ -129,11 +148,24 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
                 ))}
             </ImageList>
             <div>
-                <button type='button' value='p' onClick={loadNewMokeMons}>Load Previous</button>
-                <button type='button' value='n' onClick={loadNewMokeMons}>Load Next</button>
+                <button type='button' className={classes.button} value='p' onClick={loadNewMokeMons}
+                        disabled={allMokeMonsDetail.length <= 0}>
+                    Load Previous
+                </button>
+
+                <button type='button' className={classes.button} value='n' onClick={loadNewMokeMons}
+                        disabled={allMokeMonsDetail.length <= 0}>
+                    Load Next
+                </button>
+                <button type='button' className={classes.button}
+                        disabled={selectedMokeMons.length <= 0}>
+                    <Link to="/gallery" selectedMokeMons={selectedMokeMons}>Gallery</Link>
+                </button>
+
             </div>
         </div>
     );
 };
+
 
 export default MokeMonsImageList;
