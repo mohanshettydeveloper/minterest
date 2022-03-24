@@ -4,6 +4,7 @@ import {loadMokeMonsDetailArr} from "../../Functions/GetMokeMonDetails";
 import makeStyles from "@mui/styles/makeStyles";
 import Header from "../../components/Header/Header";
 import {useDispatch} from "react-redux";
+import {Button} from "@mui/material";
 
 const useStyles = makeStyles({
     button: {
@@ -32,7 +33,7 @@ const Main = () => {
 
     const loadAllMokeMonsSummary = () => {
         setState(Date.now())
-        const allMokeMonsUrl = 'https://pokeapi.co/api/v2/pokemon?limit=9';
+        const allMokeMonsUrl = 'https://pokeapi.co/api/v2/pokemon?limit=151';
         fetch(allMokeMonsUrl)
             .then(response => response.json())
             .then(results => {
@@ -66,7 +67,7 @@ const Main = () => {
     return (<div align='center'>
         <div><Header/></div>
         <div>
-            <button type='submit' className={classes.button} onClick={loadAllMokeMonsSummary}>Load Mokemons</button>
+            <Button variant="contained" type='submit' className={classes.button} onClick={loadAllMokeMonsSummary}>Load Mokemons</Button>
             <MokeMonsImageList allMokeMonsDetail={allMokeMonsDetail} someKey={state}/>
             {/*<button type='button' onClick={loadNewMokeMons('p')}>Load Previous</button>*/}
         </div>

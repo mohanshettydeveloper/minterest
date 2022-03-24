@@ -11,6 +11,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {setLikedMokeMons} from '../../selectedMokeMonsSlice';
+import {Button} from "@mui/material";
 
 const useStyles = makeStyles({
     button: {
@@ -147,20 +148,21 @@ const MokeMonsImageList = ({allMokeMonsDetail, someKey}) => {
 
                 ))}
             </ImageList>
-            <div>
-                <button type='button' className={classes.button} value='p' onClick={loadNewMokeMons}
+            <div style={{width:400, display:'flex', textAlign:'center'}}>
+
+                <Button variant="contained" type='button' className={classes.button} value='p' onClick={loadNewMokeMons}
                         disabled={allMokeMonsDetail.length <= 0}>
                     Load Previous
-                </button>
+                </Button>
 
-                <button type='button' className={classes.button} value='n' onClick={loadNewMokeMons}
+                <Button variant="contained" type='button' className={classes.button} value='n' onClick={loadNewMokeMons}
                         disabled={allMokeMonsDetail.length <= 0}>
                     Load Next
-                </button>
-                <button type='button' className={classes.button}
+                </Button>
+                <Button variant="contained" type='button' className={classes.button}
                         disabled={selectedMokeMons.length <= 0}>
                     <Link to="/gallery">Gallery</Link>
-                </button>
+                </Button>
 
             </div>
         </div>
